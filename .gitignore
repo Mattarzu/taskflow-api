@@ -11,3 +11,6 @@ prisma/migrations/**/migration_lock.toml
 
 # OS
 .DS_Store
+
+# Generated files
+server/generated/
