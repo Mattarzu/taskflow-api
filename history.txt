@@ -1,0 +1,29 @@
+    1  echo "vm.swappiness=10" > /etc/sysctl.d/99-swappiness.conf
+    2  echo ">>> HABILITANDO ZRAM OPTIMIZADA"
+    3  dnf install -y zram-generator-defaults
+    4  echo ">>> AJUSTES DE SYSCTL PARA REDUCCION DE LATENCIA"
+    5  cat > /etc/sysctl.d/90-performance.conf << EOF
+    6  kernel.sched_autogroup_enabled = 0
+    7  vm.dirty_ratio = 10
+    8  vm.dirty_background_ratio = 5
+    9  net.core.netdev_m_
+   10  [200~npm test
+   11  npx prisma migrate deploy
+   12  node index.js
+   13  ~npm test
+   14  pwd
+   15  npm test
+   16  src/controllers/tasks.controller.js
+   17  cd ~/taskflow/server && npm test
+   18  [200~cd ~/taskflow/server~
+   19  [200~cd ~/taskflow/server
+   20  npm test
+   21  ~npm test
+   22  npm test
+   23  git init 
+   24  ls -a
+   25  touch .gitignore
+   26  git remote add origin https://github.com/Mattarzu/taskflow-api.git
+   27  [200~git push -u origin main
+   28  ~git push -u origin main
+   29  history > history.txt

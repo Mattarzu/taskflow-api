@@ -60,24 +60,28 @@ export const updateTask = async (req, res) => {
     const taskId = Number(req.params.id);
     const { completed, title } = req.body;
 
-    const task = await prisma.task.updateMany({
+    const task = await prisma.task.findFirst({
       where: {
         id: taskId,
         userId: req.user.id,
       },
+    });
+
+    if (!task) {
+      return res.status(404).json({
+        message: "Tarea no encontrada",
+      });
+    }
+
+    const updatedTask = await prisma.task.update({
+      where: { id: task.id },
       data: {
         ...(title !== undefined && { title }),
         ...(completed !== undefined && { completed }),
       },
     });
 
-    if (task.count === 0) {
-      return res.status(404).json({
-        message: "Tarea no encontrada",
-      });
-    }
-
-    return res.json({ message: "Tarea actualizada" });
+    return res.json({ task: updatedTask });
   } catch (error) {
     console.error("Error al actualizar tarea:", error);
     return res.status(500).json({
@@ -93,20 +97,24 @@ export const deleteTask = async (req, res) => {
   try {
     const taskId = Number(req.params.id);
 
-    const task = await prisma.task.deleteMany({
+    const task = await prisma.task.findFirst({
       where: {
         id: taskId,
         userId: req.user.id,
       },
     });
 
-    if (task.count === 0) {
+    if (!task) {
       return res.status(404).json({
         message: "Tarea no encontrada",
       });
     }
 
-    return res.json({ message: "Tarea eliminada" });
+    await prisma.task.delete({
+      where: { id: task.id },
+    });
+
+    return res.status(204).send();
   } catch (error) {
     console.error("Error al eliminar tarea:", error);
     return res.status(500).json({

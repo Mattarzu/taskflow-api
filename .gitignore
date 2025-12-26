@@ -1,16 +1,50 @@
+# =========================
 # Node
+# =========================
 node_modules/
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Env
+# =========================
+# Environment variables
+# =========================
 .env
+.env.*
 
+# =========================
 # Prisma
+# =========================
 prisma/dev.db
+prisma/dev.db-journal
+prisma/client.js
 prisma/migrations/**/migration_lock.toml
 
-# OS
-.DS_Store
-
+# =========================
 # Generated files
-server/generated/
+# =========================
+generated/
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Tests
+# =========================
+coverage/
+
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+.vscode/
+.idea/
+
+# =========================
+# Local / AI
+# =========================
+.assistant-config.md
+node_modules
