@@ -15,6 +15,14 @@ describe("Auth", () => {
     expect(res.body).toHaveProperty("email", email);
   });
 
+  test("POST /auth/register duplicado -> 409", async () => {
+    const res = await request(app)
+      .post("/auth/register")
+      .send({ email, password });
+
+    expect(res.statusCode).toBe(409);
+  });
+
   test("POST /auth/login -> token", async () => {
     const res = await request(app)
       .post("/auth/login")
@@ -31,5 +39,4 @@ describe("Auth", () => {
 afterAll(async () => {
   await prisma.$disconnect();
 });
-
 

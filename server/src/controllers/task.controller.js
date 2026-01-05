@@ -59,6 +59,24 @@ export const updateTask = async (req, res) => {
   try {
     const taskId = Number(req.params.id);
     const { completed, title } = req.body;
+    const hasTitle = title !== undefined;
+    const hasCompleted = completed !== undefined;
+
+    if (!Number.isInteger(taskId)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
+
+    if (!hasTitle && !hasCompleted) {
+      return res.status(400).json({ message: "Nada para actualizar" });
+    }
+
+    if (hasTitle && (typeof title !== "string" || title.trim() === "")) {
+      return res.status(400).json({ message: "Título inválido" });
+    }
+
+    if (hasCompleted && typeof completed !== "boolean") {
+      return res.status(400).json({ message: "Completed inválido" });
+    }
 
     const task = await prisma.task.findFirst({
       where: {
@@ -76,8 +94,8 @@ export const updateTask = async (req, res) => {
     const updatedTask = await prisma.task.update({
       where: { id: task.id },
       data: {
-        ...(title !== undefined && { title }),
-        ...(completed !== undefined && { completed }),
+        ...(hasTitle && { title: title.trim() }),
+        ...(hasCompleted && { completed }),
       },
     });
 
@@ -96,6 +114,10 @@ export const updateTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
   try {
     const taskId = Number(req.params.id);
+
+    if (!Number.isInteger(taskId)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
 
     const task = await prisma.task.findFirst({
       where: {
@@ -122,4 +144,3 @@ export const deleteTask = async (req, res) => {
     });
   }
 };
-

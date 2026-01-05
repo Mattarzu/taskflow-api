@@ -28,6 +28,9 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error("REGISTER ERROR:", error);
+    if (error?.code === "P2002") {
+      return res.status(409).json({ message: "Email ya registrado" });
+    }
     return res.status(500).json({ message: "Error en register" });
   }
 };
@@ -77,10 +80,8 @@ export const login = async (req, res) => {
     console.error("LOGIN ERROR:", error);
     return res.status(500).json({
       message: "Error en login",
-      error: error.message,
     });
   }
 };
-
 
 

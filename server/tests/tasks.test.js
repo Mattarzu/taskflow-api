@@ -67,6 +67,31 @@ describe("Tasks", () => {
     expect(res.body.task).toHaveProperty("completed", true);
   });
 
+  test("PATCH /tasks/:id sin cambios -> 400", async () => {
+    const created = await request(app)
+      .post("/tasks")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ title: "Sin cambios" });
+
+    const id = created.body.task.id;
+
+    const res = await request(app)
+      .patch(`/tasks/${id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({});
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  test("PATCH /tasks/:id id inválido -> 400", async () => {
+    const res = await request(app)
+      .patch("/tasks/abc")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ completed: true });
+
+    expect(res.statusCode).toBe(400);
+  });
+
   test("DELETE /tasks/:id -> elimina tarea (JWT)", async () => {
     const created = await request(app)
       .post("/tasks")
@@ -82,6 +107,14 @@ describe("Tasks", () => {
     expect([200, 204]).toContain(res.statusCode);
   });
 
+  test("DELETE /tasks/:id id inválido -> 400", async () => {
+    const res = await request(app)
+      .delete("/tasks/abc")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.statusCode).toBe(400);
+  });
+
   test("GET /tasks sin token -> 401/403", async () => {
     const res = await request(app).get("/tasks");
     expect([401, 403]).toContain(res.statusCode);
@@ -91,4 +124,3 @@ describe("Tasks", () => {
 afterAll(async () => {
   await prisma.$disconnect();
 });
-
